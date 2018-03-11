@@ -1,2 +1,1 @@
-# project-curso-js-ninja
-Projeto do Curso Javascript Ninja
+# Projeto do Curso Javascript Ninja
