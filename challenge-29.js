@@ -110,7 +110,9 @@
 
       initEvents: function initEvents() {
         var $form = $('[data-js=form]');
+        var $btnRemove = $('[data-js=button-remove]');
         $form.on('submit', app.handleSubmitForm);
+        $btnRemove.on('click', app.handleRemoveCar);        
       },
 
       handleSubmitForm: function handleSubmitForm(event) {
@@ -119,6 +121,16 @@
         var newCar = app.getCar();
         $dealershipTable.get().appendChild(app.addNewCar());
         clearForm();
+        app.initEvents();
+      },
+
+      handleRemoveCar: function handleRemoveCar(event) {
+        event.preventDefault();
+        var td = this.parentNode;
+        var tr = td.parentElement;
+        if (tr.parentElement) {
+          tr.parentElement.removeChild(tr);
+        }
       },
 
       addNewCar: function addNewCar() {
@@ -130,6 +142,10 @@
         var tdAno = doc.createElement('td');
         var tdPlaca = doc.createElement('td');
         var tdCor = doc.createElement('td');
+        var tdRemove = doc.createElement('td');
+        var buttonRemove = doc.createElement('button');
+        buttonRemove.setAttribute('data-js', 'button-remove')
+        buttonRemove.textContent = 'Remover';
 
         img.setAttribute('src', getInput['imagem'].value );
         tdImage.appendChild(img);
@@ -137,12 +153,14 @@
         tdAno.textContent = getInput['ano'].value;
         tdPlaca.textContent = getInput['placa'].value;
         tdCor.textContent = getInput['cor'].value;
+        tdRemove.appendChild(buttonRemove);
 
         tr.appendChild(tdImage);
         tr.appendChild(tdMarcaModelo);
         tr.appendChild(tdAno);
         tr.appendChild(tdPlaca);
         tr.appendChild(tdCor);
+        tr.appendChild(tdRemove);
 
         return fragment.appendChild(tr);
       },
