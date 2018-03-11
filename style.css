@@ -1,0 +1,77 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.dealership__title  {
+    color: darkgreen;
+    font-size: 20px;
+}
+
+.dealership__register {
+  width: 500px;
+  margin-bottom: 20px;
+}
+
+.dealership__register .row {
+  display: block;
+  padding: 5px;
+}
+
+.row label {
+    font-weight: bold;
+}
+
+.row input {
+  border: 1px solid #ccc;
+  width: 100%;
+  padding: 5px;
+  color: #333333;
+  cursor: pointer;
+}
+
+.dealership__register .row:last-child {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+
+.row button {
+    background: darkgreen;
+    border: 0;
+    padding: 5px;
+    width: 150px;
+    align-items: flex-start;
+    color: #ffffff;
+    font-weight: bold;
+    opacity: .9;
+}
+
+.row button:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+table {
+  min-width: 500px;
+}
+
+table thead tr th {
+  border: 1px solid #ccc;
+}
+
+tbody tr td {
+  border: 1px solid #ccc;
+}
+tr td image {
+  border: 1px solid #000;
+  max-width: 50px;
+}
+
+img {
+  max-width: 200px;
+  height: auto;
+}
