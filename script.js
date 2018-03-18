@@ -39,6 +39,7 @@
   var app = (function appController(win, doc) {
     var ajax;
     var getInput = getInputs();
+    var fragment = doc.createDocumentFragment();
 
     function getInputs() {
       var inputs = {
@@ -177,8 +178,12 @@
         }
       },
 
-      makeMarkupTable: function makeMarkupTable(car) {
-        var fragment = doc.createDocumentFragment();
+      makeMarkupTable: function makeMarkupTable(cars) {
+        var markup = cars.map(app.appendCar);
+        return fragment;
+      },
+      
+      appendCar: function appendCar(car) {
         var tr = doc.createElement('tr');
         var img = doc.createElement('img');
         var tdImage =doc.createElement('td');
@@ -216,10 +221,8 @@
         ajax.addEventListener('readystatechange', function () {
           if (ajax.readyState === 4) {
             var cars = JSON.parse(ajax.responseText);
-            cars.map(function (car) {
-              var $dealershipTable = $('[data-js=dealership-table]');
-              $dealershipTable.get().appendChild(app.makeMarkupTable(car));  
-            });
+            var $dealershipTable = $('[data-js=dealership-table]');
+            $dealershipTable.get().appendChild(app.makeMarkupTable(cars));  
             app.initEvents();
           }
         });
