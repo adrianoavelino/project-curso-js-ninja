@@ -121,6 +121,10 @@
         var $dealershipTable = $('[data-js=dealership-table]');
         var newCar = app.getCar();
         $dealershipTable.get().appendChild(app.addNewCar());
+        app.saveCar();
+        var $dealershipTable = $('[data-js=dealership-table]');
+        $dealershipTable.get().innerHTML = '';
+        app.renderAllCars();
         clearForm();
       },
 
@@ -228,7 +232,26 @@
             app.initEvents();
           }
         });
+      },
+
+      saveCar: function saveCar() {
+        var querString = 'image=' + getInput['imagem'].value + '&' ;
+        querString += 'brandModel=' + getInput['marcaModelo'].value + '&';
+        querString += 'year=' + getInput['ano'].value + '&';
+        querString += 'plate=' + getInput['placa'].value + '&';
+        querString += 'color=' + getInput['cor'].value + '&';
+
+        ajax = new XMLHttpRequest();
+        ajax.open('POST', 'http://localhost:3000/car');
+        ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        ajax.send(querString);
+        ajax.addEventListener('readystatechange',function () {
+          if (app.isRequestOK()) {
+            console.log('Usuário cadastrado!', ajax.responseText);
+          } 
+        });
       }
+      
     }
   })(window, document);
   
