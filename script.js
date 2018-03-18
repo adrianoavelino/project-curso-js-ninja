@@ -39,7 +39,6 @@
   var app = (function appController(win, doc) {
     var ajax;
     var getInput = getInputs();
-    var fragment = doc.createDocumentFragment();
 
     function getInputs() {
       var inputs = {
@@ -178,40 +177,43 @@
         }
       },
 
-      makeMarkupTable: function makeMarkupTable(cars) {
-        var markup = cars.map(app.appendCar);
-        return fragment;
+      makeMarkupCarTable: function makeMarkupCarTable(cars) {
+        var fragmentCarTable = doc.createDocumentFragment();
+        var markup = cars.map(app.appendCar(fragmentCarTable));
+        return fragmentCarTable;
       },
       
-      appendCar: function appendCar(car) {
-        var tr = doc.createElement('tr');
-        var img = doc.createElement('img');
-        var tdImage =doc.createElement('td');
-        var tdMarcaModelo = doc.createElement('td');
-        var tdAno = doc.createElement('td');
-        var tdPlaca = doc.createElement('td');
-        var tdCor = doc.createElement('td');
-        var tdRemove = doc.createElement('td');
-        var buttonRemove = doc.createElement('button');
-        buttonRemove.setAttribute('data-js', 'button-remove')
-        buttonRemove.textContent = 'Remover';
+      appendCar: function appendCar(fragment) {
+        return function(car) {
+          var tr = doc.createElement('tr');
+          var img = doc.createElement('img');
+          var tdImage =doc.createElement('td');
+          var tdMarcaModelo = doc.createElement('td');
+          var tdAno = doc.createElement('td');
+          var tdPlaca = doc.createElement('td');
+          var tdCor = doc.createElement('td');
+          var tdRemove = doc.createElement('td');
+          var buttonRemove = doc.createElement('button');
+          buttonRemove.setAttribute('data-js', 'button-remove')
+          buttonRemove.textContent = 'Remover';
 
-        img.setAttribute('src', car.image );
-        tdImage.appendChild(img);
-        tdMarcaModelo.textContent = car.brandModel;
-        tdAno.textContent = car.year;
-        tdPlaca.textContent = car.plate;
-        tdCor.textContent = car.color;
-        tdRemove.appendChild(buttonRemove);
+          img.setAttribute('src', car.image );
+          tdImage.appendChild(img);
+          tdMarcaModelo.textContent = car.brandModel;
+          tdAno.textContent = car.year;
+          tdPlaca.textContent = car.plate;
+          tdCor.textContent = car.color;
+          tdRemove.appendChild(buttonRemove);
 
-        tr.appendChild(tdImage);
-        tr.appendChild(tdMarcaModelo);
-        tr.appendChild(tdAno);
-        tr.appendChild(tdPlaca);
-        tr.appendChild(tdCor);
-        tr.appendChild(tdRemove);
+          tr.appendChild(tdImage);
+          tr.appendChild(tdMarcaModelo);
+          tr.appendChild(tdAno);
+          tr.appendChild(tdPlaca);
+          tr.appendChild(tdCor);
+          tr.appendChild(tdRemove);
 
-        return fragment.appendChild(tr);
+          return fragment.appendChild(tr);
+        }
       },
       
       renderAllCars: function renderAllCars() {
@@ -222,7 +224,7 @@
           if (ajax.readyState === 4) {
             var cars = JSON.parse(ajax.responseText);
             var $dealershipTable = $('[data-js=dealership-table]');
-            $dealershipTable.get().appendChild(app.makeMarkupTable(cars));  
+            $dealershipTable.get().appendChild(app.makeMarkupCarTable(cars));  
             app.initEvents();
           }
         });
