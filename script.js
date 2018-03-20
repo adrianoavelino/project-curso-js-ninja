@@ -119,8 +119,6 @@
       handleSubmitForm: function handleSubmitForm(event) {
         event.preventDefault();
         var $dealershipTable = $('[data-js=dealership-table]');
-        var newCar = app.getCar();
-        $dealershipTable.get().appendChild(app.addNewCar());
         app.saveCar();
         var $dealershipTable = $('[data-js=dealership-table]');
         $dealershipTable.get().innerHTML = '';
@@ -134,50 +132,6 @@
         var tr = td.parentElement;
         if (tr.parentElement) {
           tr.parentElement.removeChild(tr);
-        }
-      },
-
-      addNewCar: function addNewCar() {
-        var fragment = doc.createDocumentFragment();
-        var tr = doc.createElement('tr');
-        var img = doc.createElement('img');
-        var tdImage =doc.createElement('td');
-        var tdMarcaModelo = doc.createElement('td');
-        var tdAno = doc.createElement('td');
-        var tdPlaca = doc.createElement('td');
-        var tdCor = doc.createElement('td');
-        var tdRemove = doc.createElement('td');
-        var buttonRemove = doc.createElement('button');
-
-        buttonRemove.setAttribute('data-js', 'button-remove')
-        buttonRemove.textContent = 'Remover';
-        img.setAttribute('src', getInput['imagem'].value );
-
-        tdImage.appendChild(img);
-        tdMarcaModelo.textContent = getInput['marcaModelo'].value;
-        tdAno.textContent = getInput['ano'].value;
-        tdPlaca.textContent = getInput['placa'].value;
-        tdCor.textContent = getInput['cor'].value;
-        tdRemove.appendChild(buttonRemove);
-
-        tr.appendChild(tdImage);
-        tr.appendChild(tdMarcaModelo);
-        tr.appendChild(tdAno);
-        tr.appendChild(tdPlaca);
-        tr.appendChild(tdCor);
-        tr.appendChild(tdRemove);
-        buttonRemove.addEventListener('click', app.handleRemoveCar);
-
-        return fragment.appendChild(tr);
-      },
-
-      getCar: function getCar() {
-        return {
-          img: getInput['imagem'].value,
-          modelo: getInput['marcaModelo'].value,
-          ano: getInput['ano'].value,
-          placa: getInput['placa'].value,
-          cor: getInput['cor'].value
         }
       },
 
