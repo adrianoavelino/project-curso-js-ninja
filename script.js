@@ -131,7 +131,11 @@
         var td = this.parentNode;
         var tr = td.parentElement;
         if (tr.parentElement) {
-          tr.parentElement.removeChild(tr);
+          var plate = tr.childNodes[3].textContent;
+          var $dealershipTable = $('[data-js=dealership-table]');
+          app.removeCar(plate);
+          $dealershipTable.get().innerHTML = '';
+          app.renderAllCars();
         }
       },
 
@@ -204,8 +208,20 @@
             console.log('Usuário cadastrado!', ajax.responseText);
           } 
         });
+      },
+
+      removeCar: function removeCar(carDeleted) {
+          var querString =  'plate=' + carDeleted;
+        ajax = new XMLHttpRequest();
+        ajax.open('DELETE', 'http://localhost:3000/car');
+        ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        ajax.send(querString);
+        ajax.addEventListener('readystatechange',function () {
+          if (app.isRequestOK()) {
+            console.log('Carro deletado!', ajax.responseText);
+          }
+        });
       }
-      
     }
   })(window, document);
   
