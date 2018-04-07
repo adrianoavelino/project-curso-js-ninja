@@ -133,9 +133,8 @@
         if (tr.parentElement) {
           var plate = tr.childNodes[3].textContent;
           var $dealershipTable = $('[data-js=dealership-table]');
-          app.removeCar(plate);
           $dealershipTable.get().innerHTML = '';
-          app.renderAllCars();
+          app.removeCar(plate, app.renderAllCars);
         }
       },
 
@@ -210,8 +209,8 @@
         });
       },
 
-      removeCar: function removeCar(carDeleted) {
-          var querString =  'plate=' + carDeleted;
+      removeCar: function removeCar(carDeleted, callback) {
+        var querString =  'plate=' + carDeleted;
         ajax = new XMLHttpRequest();
         ajax.open('DELETE', 'http://localhost:3000/car');
         ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -219,6 +218,7 @@
         ajax.addEventListener('readystatechange',function () {
           if (app.isRequestOK()) {
             console.log('Carro deletado!', ajax.responseText);
+            callback();
           }
         });
       }
