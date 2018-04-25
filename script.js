@@ -119,10 +119,7 @@
       handleSubmitForm: function handleSubmitForm(event) {
         event.preventDefault();
         var $dealershipTable = $('[data-js=dealership-table]');
-        app.saveCar();
-        var $dealershipTable = $('[data-js=dealership-table]');
-        $dealershipTable.get().innerHTML = '';
-        app.renderAllCars();
+        app.saveCar(app.renderAllCars);
         clearForm();
       },
 
@@ -133,8 +130,8 @@
         if (tr.parentElement) {
           var plate = tr.childNodes[3].textContent;
           var $dealershipTable = $('[data-js=dealership-table]');
-          $dealershipTable.get().innerHTML = '';
-          app.removeCar(plate, app.renderAllCars);
+          $dealershipTable.get().innerHTML = 'Atualizando ...';
+          app.removeCar.call(this, app.renderAllCars);
         }
       },
 
@@ -185,13 +182,14 @@
           if (ajax.readyState === 4) {
             var cars = JSON.parse(ajax.responseText);
             var $dealershipTable = $('[data-js=dealership-table]');
+            $dealershipTable.get().innerHTML = '';
             $dealershipTable.get().appendChild(app.makeMarkupCarTable(cars));  
             app.initEvents();
           }
         });
       },
 
-      saveCar: function saveCar() {
+      saveCar: function saveCar(callback) {
         var querString = 'image=' + getInput['imagem'].value + '&' ;
         querString += 'brandModel=' + getInput['marcaModelo'].value + '&';
         querString += 'year=' + getInput['ano'].value + '&';
@@ -205,12 +203,16 @@
         ajax.addEventListener('readystatechange',function () {
           if (app.isRequestOK()) {
             console.log('Usuário cadastrado!', ajax.responseText);
+            callback();
           } 
         });
       },
 
-      removeCar: function removeCar(carDeleted, callback) {
-        var querString =  'plate=' + carDeleted;
+      removeCar: function removeCar(callback) {
+        var td = this.parentNode;
+        var tr = td.parentElement;
+        var plateCarDeleted = tr.childNodes[3].textContent;
+        var querString =  'plate=' + plateCarDeleted;
         ajax = new XMLHttpRequest();
         ajax.open('DELETE', 'http://localhost:3000/car');
         ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
