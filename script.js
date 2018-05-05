@@ -130,7 +130,7 @@
         if (tr.parentElement) {
           var plate = tr.childNodes[3].textContent;
           var $dealershipTable = $('[data-js=dealership-table]');
-          $dealershipTable.get().innerHTML = 'Atualizando ...';
+          // $dealershipTable.get().innerHTML = 'Atualizando ...';
           app.removeCar.call(this, app.renderAllCars);
         }
       },
@@ -173,20 +173,43 @@
           return fragment.appendChild(tr);
         }
       },
-      
+
       renderAllCars: function renderAllCars() {
         var ajax = new XMLHttpRequest();
+        var $dealershipBodyTable = $('[data-js=dealership-table]');
+        var $dealershipHeaderTable = $('[data-js=dealership-header]');
         ajax.open('GET', 'http://localhost:3000/car');
         ajax.send();
         ajax.addEventListener('readystatechange', function () {
           if (ajax.readyState === 4) {
             var cars = JSON.parse(ajax.responseText);
-            var $dealershipTable = $('[data-js=dealership-table]');
-            $dealershipTable.get().innerHTML = '';
-            $dealershipTable.get().appendChild(app.makeMarkupCarTable(cars));  
+            if(!cars.length) {
+              app.renderDealershipTableEmpty();
+              return;
+            }
+            app.renderDealershipHeaderTable();
+            app.renderDealershipBodyTable(cars);
             app.initEvents();
           }
         });
+      },
+
+      renderDealershipTableEmpty: function renderDealershipTableEmpty() {
+        var $dealershipBodyTable = $('[data-js=dealership-table]');
+        var $dealershipHeaderTable = $('[data-js=dealership-header]');
+        $dealershipHeaderTable.get().innerHTML = '<tr> <td colspan="6">Não existem carros cadastrados</td> </tr>';
+        $dealershipBodyTable.get().innerHTML = '';
+      },
+
+      renderDealershipHeaderTable: function renderDealershipHeaderTable() {
+        var $dealershipHeaderTable = $('[data-js=dealership-header]');
+        $dealershipHeaderTable.get().innerHTML = '<tr> <th colspan="6">Lista de Carros</th> </tr>' + ' <tr> <th>Imagem</th> <th>Marca / Modelo</th> <th>Ano</th> <th>Placa</th> <th>Cor</th> <th>#</th> </tr>';  
+      },
+
+      renderDealershipBodyTable: function renderDealershipBodyTable(cars) {
+        var $dealershipBodyTable = $('[data-js=dealership-table]');
+        $dealershipBodyTable.get().innerHTML = '';
+        $dealershipBodyTable.get().appendChild(app.makeMarkupCarTable(cars));  
       },
 
       saveCar: function saveCar(callback) {
