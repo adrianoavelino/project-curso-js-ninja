@@ -118,9 +118,55 @@
 
       handleSubmitForm: function handleSubmitForm(event) {
         event.preventDefault();
+        if (!app.validateForm()) {
+          return false;
+        };
         var $dealershipTable = $('[data-js=dealership-table]');
         app.saveCar(app.renderAllCars);
         clearForm();
+      },
+
+      validateForm: function validateForm() {
+        var msg = null;
+        var msgError = {
+          imagem: '',
+          marcaModelo:'',
+          ano:'',
+          placa:'',
+          cor:''
+        };
+
+        if (!getInput['imagem'].value) {
+          msg = 'Preencha o campo Imagem do carro';
+          msgError['imagem'] = msg;
+        }
+
+        if (!getInput['marcaModelo'].value) {
+          msg = 'Preencha o campo Marca / Modelo';
+          msgError['marcaModelo'] = msg;
+        }
+
+        if (!getInput['ano'].value) {
+          msg = 'Preencha o campo ano';
+          msgError['ano'] = msg;
+        }
+
+        if (!getInput['placa'].value) {
+          msg = 'Preencha o campo placa';
+          msgError['placa'] = msg;
+        }
+
+        if (!getInput['cor'].value) {
+          msg = 'Preencha o campo cor';
+          msgError['cor'] = msg;
+        }
+
+        for(var error in msgError){
+          var input = getInput[error].parentNode.childNodes[5];
+          input.textContent = msgError[error];
+        }
+
+        return !msg;
       },
 
       handleRemoveCar: function handleRemoveCar(event) {
